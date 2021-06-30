@@ -1,1 +1,5 @@
 node_modules
+.nyc_output
+tests/coverage
+tests/results
+tests/videos
