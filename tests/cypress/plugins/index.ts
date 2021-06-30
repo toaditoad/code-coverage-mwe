@@ -7,6 +7,8 @@ const cypressWebpackPreprocessor = require('@cypress/webpack-preprocessor');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+// These webpack options are not needed for this minimal working example
+// but are relevant for the actual project that suffers the same problem.
 const webpackOptions = {
     module: {
         rules: [
