@@ -1,0 +1,24 @@
+{
+    "testFiles": "component/**/*.spec.js",
+    "componentFolder": "tests",
+    "experimentalComponentTesting": true,
+    "integrationFolder": "",
+    "supportFile": "tests/cypress/support/index.ts",
+    "pluginsFile": "tests/cypress/plugins/index.ts",
+    "screenshotsFolder": "tests/screenshots",
+    "videosFolder": "tests/videos",
+    "fixturesFolder": "tests/fixtures",
+    "reporter": "cypress-multi-reporters",
+    "reporterOptions": {
+        "reporterEnabled": "spec, mocha-junit-reporter",
+        "mochaJunitReporterReporterOptions": {
+            "mochaFile": "tests/results/component/results-[hash].xml",
+            "testsuitesTitle": true,
+            "useFullSuiteTitle": true,
+            "outputs": true,
+            "attachments": false
+        }
+    },
+    "baseUrl": "http://localhost:8080",
+    "$schema": "https://on.cypress.io/cypress.schema.json"
+}
