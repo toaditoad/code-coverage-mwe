@@ -7,6 +7,28 @@ const cypressWebpackPreprocessor = require('@cypress/webpack-preprocessor');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+const fs = require("fs")
+const path = require("path")
+
+const getAllFiles = function(dirPath, arrayOfFiles) {
+  var files = fs.readdirSync(dirPath)
+
+  arrayOfFiles = arrayOfFiles || []
+
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+    } else {
+      if (!file.match("App.vue") && (file.match(/\.tsx?$/) || file.match(/\.vue?$/))) {
+        arrayOfFiles.push(dirPath+ "/"+ file)
+        console.log(file)
+      }
+    }
+  })
+
+  return arrayOfFiles
+}
+
 // These webpack options are not needed for this minimal working example
 // but are relevant for the actual project that suffers the same problem.
 const webpackOptions = {
@@ -48,6 +70,7 @@ const webpackOptions = {
 const options = {
     webpackOptions,
     watchOptions: {},
+    additionalEntries: getAllFiles('./src/', [])
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
