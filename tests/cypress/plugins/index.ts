@@ -9,27 +9,37 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const fs = require('fs');
 
-const getAllFiles = function (dirPath, arrayOfFiles) {
-    var files = fs.readdirSync(dirPath);
+function getAllFiles(dirPath, arrayOfFiles) {
+    const files = fs.readdirSync(dirPath);
 
-    arrayOfFiles = arrayOfFiles || [];
+    let currentArrayOfFiles = arrayOfFiles || [];
 
-    files.forEach(function (file) {
-        if (fs.statSync(dirPath + '/' + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + '/' + file, arrayOfFiles);
-        } else {
-            if (
-                !file.match('App.vue') &&
-                (file.match(/\.tsx?$/) || file.match(/\.vue?$/))
-            ) {
-                arrayOfFiles.push(dirPath + '/' + file);
-                console.log(file);
-            }
+    files.forEach((file) => {
+        if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
+            currentArrayOfFiles = getAllFiles(
+                `${dirPath}/${file}`,
+                currentArrayOfFiles
+            );
+        } else if (
+            !file.match('App.vue') &&
+            (file.match(/\.tsx?$/) || file.match(/\.vue?$/))
+        ) {
+            currentArrayOfFiles.push(`${dirPath}/${file}`);
+            // eslint-disable-next-line no-console
+            console.log(file);
         }
     });
 
-    return arrayOfFiles;
-};
+    return currentArrayOfFiles;
+}
+
+function addSourcesAsAdditionalEntries() {
+    // eslint-disable-next-line no-console
+    console.log(
+        'Adding the following files as additional entries to the webpack configuration:'
+    );
+    return getAllFiles('./src/', []);
+}
 
 // These webpack options are not needed for this minimal working example
 // but are relevant for the actual project that suffers the same problem.
@@ -68,7 +78,7 @@ const webpackOptions = {
 const options = {
     webpackOptions,
     watchOptions: {},
-    additionalEntries: getAllFiles('./src/', []),
+    additionalEntries: addSourcesAsAdditionalEntries(),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
