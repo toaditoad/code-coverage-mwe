@@ -7,27 +7,29 @@ const cypressWebpackPreprocessor = require('@cypress/webpack-preprocessor');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-const fs = require("fs")
-const path = require("path")
+const fs = require('fs');
 
-const getAllFiles = function(dirPath, arrayOfFiles) {
-  var files = fs.readdirSync(dirPath)
+const getAllFiles = function (dirPath, arrayOfFiles) {
+    var files = fs.readdirSync(dirPath);
 
-  arrayOfFiles = arrayOfFiles || []
+    arrayOfFiles = arrayOfFiles || [];
 
-  files.forEach(function(file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-    } else {
-      if (!file.match("App.vue") && (file.match(/\.tsx?$/) || file.match(/\.vue?$/))) {
-        arrayOfFiles.push(dirPath+ "/"+ file)
-        console.log(file)
-      }
-    }
-  })
+    files.forEach(function (file) {
+        if (fs.statSync(dirPath + '/' + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + '/' + file, arrayOfFiles);
+        } else {
+            if (
+                !file.match('App.vue') &&
+                (file.match(/\.tsx?$/) || file.match(/\.vue?$/))
+            ) {
+                arrayOfFiles.push(dirPath + '/' + file);
+                console.log(file);
+            }
+        }
+    });
 
-  return arrayOfFiles
-}
+    return arrayOfFiles;
+};
 
 // These webpack options are not needed for this minimal working example
 // but are relevant for the actual project that suffers the same problem.
@@ -35,25 +37,21 @@ const webpackOptions = {
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.vue$/,
+                loader: 'vue-loader',
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.ts$/,
                 use: 'babel-loader',
                 exclude: /node_modules/,
             },
             {
                 test: /\.css$/,
                 use: ['vue-style-loader', 'css-loader'],
-            },
-            {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-                exclude: /node_modules|\.d\.ts$/,
-                options: {
-                    appendTsSuffixTo: [/\.vue$/],
-                },
-            },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader',
             },
             {
                 test: /\.d\.ts$/,
@@ -70,7 +68,7 @@ const webpackOptions = {
 const options = {
     webpackOptions,
     watchOptions: {},
-    additionalEntries: getAllFiles('./src/', [])
+    additionalEntries: getAllFiles('./src/', []),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

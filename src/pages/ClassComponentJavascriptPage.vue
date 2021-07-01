@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Foo Page</h1>
+        <h1>ClassComponentJavascriptPage</h1>
         <p>
             Counter's value is
             <span class="counter">{{ counter }}</span
@@ -10,15 +10,17 @@
     </div>
 </template>
 
-<script lang="ts">
+<script>
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
 @Component({})
-export default class FooPage extends Vue {
+export default class ClassComponentJavascriptPage extends Vue {
     counter = 0;
 
-    incrementCounter(): void {
+    incrementCounter() {
         this.counter += 1;
     }
 }
